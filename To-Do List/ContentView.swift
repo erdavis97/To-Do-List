@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
    @ObservedObject var toDoList = ToDoList()
+    @State private var showingAddItemView = false
     var body: some View {
         NavigationView {
             List {
@@ -31,7 +32,14 @@ struct ContentView: View {
                 }
             }
             .navigationBarTitle("To Do List", displayMode: .inline)
-            .navigationBarItems(leading: EditButton())
+            .sheet(isPresented: $showingAddItemView, content: {
+                AddItemView(toDoList: toDoList)
+            })
+            .navigationBarItems(leading: EditButton(),
+                                trailing: Button(action: {
+                                   showingAddItemView = true}) {
+                                   Image(systemName: "plus")
+                })
         }
     }
 }
